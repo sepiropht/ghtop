@@ -1,4 +1,4 @@
-# System Metrics Monitoring Tool
+# GHTOP
 
 This tool captures system metrics (CPU, memory, disk usage, and process information) and allows remote access via a REST API. It can also be used locally via command-line interface (CLI) commands.
 
