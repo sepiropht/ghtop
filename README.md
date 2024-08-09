@@ -2,7 +2,7 @@
 
 A dumb metrics capture
 
-1. **Metrics Capture Module**: A Go module that continuously captures system metrics (CPU, memory, disk usage, and process information)
+1. **Metrics Capture Module**: A Go module that continuously captures system metrics (CPU, memory, and process information)
 2. **Web Server Module**: A Go-based HTTP server that retrieves the captured metrics via an API store them in sqlite db, and presents the data in a web interface.
 
 ## Why I Did This
