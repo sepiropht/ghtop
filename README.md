@@ -11,8 +11,7 @@ I wanted a simple solution to monitor my server's CPU, RAM usage, and running pr
 
 ## Usage
 
-Clone the repo on the server that want data form, there you will start sonde, and on the server that monitore you will launch
-the server
+Clone the repository on the server where you want to collect data from. On this server, you will start the capture module. On the server that will monitor the data, you will launch the web server module.
 
 ### Launch the sonde
 
