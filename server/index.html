@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Metrics</title>
+    <style>
+      table {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 18px;
+        text-align: left;
+      }
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+      }
+      .duration-select {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Top Processes by CPU and Memory Usage</h1>
+
+    <div class="duration-select">
+      <label for="duration">Select Duration: </label>
+      <select id="duration" onchange="handleDurationChange()">
+        <option value="1m">Last 1 Minute</option>
+        <option value="5m">Last 5 Minutes</option>
+        <option value="1h">Last 1 Hour</option>
+        <option value="24h">Last 24 Hours</option>
+      </select>
+    </div>
+
+    <h2>Top 10 CPU Consumers</h2>
+    <table id="cpuTable">
+      <tr>
+        <th>PID</th>
+        <th>Name</th>
+        <th>CPU (%)</th>
+        <th>Memory (%)</th>
+      </tr>
+    </table>
+
+    <h2>Top 10 Memory Consumers</h2>
+    <table id="memoryTable">
+      <tr>
+        <th>PID</th>
+        <th>Name</th>
+        <th>CPU (%)</th>
+        <th>Memory (%)</th>
+      </tr>
+    </table>
+
+    <script>
+      async function fetchTopProcesses(type, duration) {
+        const response = await fetch(`/top?type=${type}&duration=${duration}`)
+        return response.json()
+      }
+
+      function renderTable(data, tableId) {
+        const table = document.getElementById(tableId)
+        table.innerHTML = `
+                <tr>
+                    <th>PID</th>
+                    <th>Name</th>
+                    <th>CPU (%)</th>
+                    <th>Memory (%)</th>
+                </tr>
+            `
+        data.forEach((proc) => {
+          const row = table.insertRow()
+          row.insertCell(0).innerText = proc.pid
+          row.insertCell(1).innerText = proc.name
+          row.insertCell(2).innerText = proc.cpu.toFixed(2)
+          row.insertCell(3).innerText = proc.memory.toFixed(2)
+        })
+      }
+
+      async function loadTables(duration) {
+        const cpuData = await fetchTopProcesses('cpu', duration)
+        renderTable(cpuData, 'cpuTable')
+
+        const memoryData = await fetchTopProcesses('memory', duration)
+        renderTable(memoryData, 'memoryTable')
+      }
+
+      function handleDurationChange() {
+        const duration = document.getElementById('duration').value
+        loadTables(duration)
+      }
+
+      // Load tables with default duration of 1 minute on page load
+      loadTables('1m')
+    </script>
+  </body>
+</html>
