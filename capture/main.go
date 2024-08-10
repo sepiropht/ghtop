@@ -27,10 +27,10 @@ type SystemMetrics struct {
 }
 
 type ProcessInfo struct {
-	PID     int32   `json:"pid"`
-	Name    string  `json:"name"`
-	CPU     float64 `json:"cpu"`
-	Memory  float32 `json:"memory"`
+	PID    int32   `json:"pid"`
+	Name   string  `json:"name"`
+	CPU    float64 `json:"cpu"`
+	Memory float32 `json:"memory"`
 }
 
 var (
@@ -175,10 +175,10 @@ func startCapture() {
 				continue
 			}
 
-			err = serializeMetrics(metrics, filename)
-			if err != nil {
-				log.Printf("Error serializing metrics: %v", err)
-			}
+			// err = serializeMetrics(metrics, filename)
+			// if err != nil {
+			// 	log.Printf("Error serializing metrics: %v", err)
+			// }
 
 			fmt.Printf("Captured metrics at %v\n", metrics.Timestamp)
 			time.Sleep(10 * time.Second) // Adjust the interval as needed

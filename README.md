@@ -1,4 +1,4 @@
-# GHTOP
+# Ghtop
 
 A dumb metrics capture
 
