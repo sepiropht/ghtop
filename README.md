@@ -18,7 +18,7 @@ Clone the repository on the server where you want to collect data from. On this 
 In the sonde directory
 
 ```bash
-$ docker-compose up --build
+$ docker-compose up -d
 ```
 
 ### Launch the web app
@@ -26,5 +26,5 @@ $ docker-compose up --build
 In the server directory
 
 ```bash
-$ docker-compose up --build
+$ docker-compose up -d
 ```

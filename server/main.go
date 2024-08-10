@@ -58,7 +58,7 @@ func initDB() {
 func fetchAndStoreData() {
 	client := resty.New()
 	resp, err := client.R().
-		Get("http://localhost:8080/view?duration=1m") // Remplacez backend-url par l'URL réelle de votre backend
+		Get("http://192.168.1.33:6080/view?duration=1m")
 
 	if err != nil {
 		log.Printf("Error fetching data: %v", err)

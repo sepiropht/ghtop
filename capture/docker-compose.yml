@@ -2,12 +2,10 @@ version: '3.8'
 
 services:
   metrics-capture:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sepiropht/ghtop-capture:latest
+    pid: 'host'
     volumes:
       - ./data:/app/data
     ports:
       - '8080:8080'
-    command: ['go', 'run', 'main.go', '-capture']
     restart: always
