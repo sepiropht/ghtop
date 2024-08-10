@@ -17,7 +17,7 @@
         padding: 12px;
         border-bottom: 1px solid #ddd;
       }
-      .duration-select {
+      .controls {
         margin-bottom: 20px;
       }
     </style>
@@ -25,7 +25,12 @@
   <body>
     <h1>Top Processes by CPU and Memory Usage</h1>
 
-    <div class="duration-select">
+    <div class="controls">
+      <label for="server">Select Server: </label>
+      <select id="server" onchange="handleServerChange()">
+        <!-- Options will be populated dynamically -->
+      </select>
+
       <label for="duration">Select Duration: </label>
       <select id="duration" onchange="handleDurationChange()">
         <option value="1m">Last 1 Minute</option>
@@ -55,9 +60,42 @@
       </tr>
     </table>
 
+    <h2>Add a New Server</h2>
+    <form action="/add-server" method="post">
+      <label for="name">Server Name:</label>
+      <input type="text" id="name" name="name" required /><br /><br />
+      <label for="url">Server URL:</label>
+      <input type="url" id="url" name="url" required /><br /><br />
+      <input type="submit" value="Add Server" />
+    </form>
+
     <script>
-      async function fetchTopProcesses(type, duration) {
-        const response = await fetch(`/top?type=${type}&duration=${duration}`)
+      async function fetchServers() {
+        const response = await fetch('/servers')
+        return response.json()
+      }
+
+      async function populateServerDropdown() {
+        const servers = await fetchServers()
+        const serverSelect = document.getElementById('server')
+
+        servers.forEach((server) => {
+          const option = document.createElement('option')
+          option.value = server.id
+          option.text = server.name
+          serverSelect.appendChild(option)
+        })
+
+        // Load data for the first server by default
+        if (servers.length > 0) {
+          loadTables(servers[0].id, '1m')
+        }
+      }
+
+      async function fetchTopProcesses(serverId, type, duration) {
+        const response = await fetch(
+          `/top?serverId=${serverId}&type=${type}&duration=${duration}`
+        )
         return response.json()
       }
 
@@ -80,21 +118,28 @@
         })
       }
 
-      async function loadTables(duration) {
-        const cpuData = await fetchTopProcesses('cpu', duration)
+      async function loadTables(serverId, duration) {
+        const cpuData = await fetchTopProcesses(serverId, 'cpu', duration)
         renderTable(cpuData, 'cpuTable')
 
-        const memoryData = await fetchTopProcesses('memory', duration)
+        const memoryData = await fetchTopProcesses(serverId, 'memory', duration)
         renderTable(memoryData, 'memoryTable')
       }
 
-      function handleDurationChange() {
+      function handleServerChange() {
+        const serverId = document.getElementById('server').value
         const duration = document.getElementById('duration').value
-        loadTables(duration)
+        loadTables(serverId, duration)
       }
 
-      // Load tables with default duration of 1 minute on page load
-      loadTables('1m')
+      function handleDurationChange() {
+        const serverId = document.getElementById('server').value
+        const duration = document.getElementById('duration').value
+        loadTables(serverId, duration)
+      }
+
+      // Populate server dropdown and load data for the first server on page load
+      populateServerDropdown()
     </script>
   </body>
 </html>
