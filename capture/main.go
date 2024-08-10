@@ -175,10 +175,10 @@ func startCapture() {
 				continue
 			}
 
-			// err = serializeMetrics(metrics, filename)
-			// if err != nil {
-			// 	log.Printf("Error serializing metrics: %v", err)
-			// }
+			err = serializeMetrics(metrics, filename)
+			if err != nil {
+				log.Printf("Error serializing metrics: %v", err)
+			}
 
 			fmt.Printf("Captured metrics at %v\n", metrics.Timestamp)
 			time.Sleep(10 * time.Second) // Adjust the interval as needed
